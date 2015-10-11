@@ -8,10 +8,13 @@
 
 
 spider(X):-
+  % Tar nästa perosn från exemplet
   person(X),
-  hittaMinaKamrater(X,K),
-  write(K),
-  backa(X,K).
+  % Hittar denna persons Kompisar
+  hittaMinaKamrater(X,Kompisar),
+  % Kolla Kolla
+  write(Kompisar),
+  backa(X,Kompisar).
 
 hittaMinaKamrater(X, Kompisar):-
   bagof(Kamrat, kompis(X,Kamrat), Kompisar).
@@ -28,6 +31,21 @@ kompis(A,B) :- knows(A,B) ; knows(B,A).
 % noFriends(P1, [P2|Tail]):-
 %   not(hittaMinaKamrater(P,Hokus)),
 %   noFriends(Tail).
+
+
+
+elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
+  checkInList(NarmasteKompisen, Kompisar),
+  !,
+  KonspirationsTeoretiker is [NarmasteKompisen | KonspirationsTeoretiker],
+  !,
+  elimineringUtavKamrater(Kompisar,KonspirationsTeoretiker).
+
+
+
+elimineringUtavKamrater([NarmasteKompisen|Kompisar],KonspirationsTeoretiker):-
+  elimineringUtavKamrater(Kompisar, KonspirationsTeoretiker).
+
 
 
 
