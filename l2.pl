@@ -17,7 +17,7 @@ noFriends([P|Tail]):-
   checkInList(P, Tail),
   noFriends(Tail).
 
-
+% Return true om P inte känner någon i listan.
 checkInList(P, [P2|[]]):-
   kompis(P,P2).
 
