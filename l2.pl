@@ -11,12 +11,13 @@ spider(X):-
   % Tar nästa perosn från exemplet
   person(X),
   % Hittar denna persons Kompisar
-  hittaMinaKamrater(X,Kompisar),
+  allaMinaKamrater(X,Kompisar),
   % Kolla Kolla
-  write(Kompisar),
+  elimineringUtavKamrater(Kompisar,KonstigaManniskor),
+  write(KonstigaManniskor),
   backa(X,Kompisar).
 
-hittaMinaKamrater(X, Kompisar):-
+allaMinaKamrater(X, Kompisar):-
   bagof(Kamrat, kompis(X,Kamrat), Kompisar).
   %findall(Kamrat ,kompis(X, Kamrat), Kompisar).
 
@@ -33,22 +34,16 @@ kompis(A,B) :- knows(A,B) ; knows(B,A).
 %   noFriends(Tail).
 
 
-
 elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
-  checkInList(NarmasteKompisen, Kompisar),
+  allaMinaKamrater(NarmasteKompisen, Svar),
+  subtract(Kompisar, Svar, KollaIgen),
+  elimineringUtavKamrater(KollaIgen,K1),
   !,
-  KonspirationsTeoretiker is [NarmasteKompisen | KonspirationsTeoretiker],
-  !,
-  elimineringUtavKamrater(Kompisar,KonspirationsTeoretiker).
+  KonspirationsTeoretiker = [NarmasteKompisen | K1].
 
+elimineringUtavKamrater([_|Kompisar], K):-elimineringUtavKamrater(Kompisar,K).
 
-
-elimineringUtavKamrater([NarmasteKompisen|Kompisar],KonspirationsTeoretiker):-
-  elimineringUtavKamrater(Kompisar, KonspirationsTeoretiker).
-
-
-
-
+elimineringUtavKamrater([],[]).
 
 % Return true om P inte känner någon i listan.
 % Return false om P känner någon i listan.
