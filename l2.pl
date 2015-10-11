@@ -3,6 +3,8 @@
 
 %spider(X):-
 
+hittaMinakompisar(X, Kompisar):-
+  findall(Kompis ,kompis(X, Kompis), Kompisar).
 
 % Vänskap går åt båda hållen.
 kompis(A,B) :- knows(A,B) ; knows(B,A).
