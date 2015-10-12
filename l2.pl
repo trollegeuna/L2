@@ -33,7 +33,8 @@ kompis(A,B) :- knows(A,B) ; knows(B,A).
 %   noFriends(Tail).
 
 
-
+% Lägg till NärmasteKompisen i KonspirationsTeoretiker.
+% Kalla funktionen igen med resterande kompisar.
 elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
   checkInList(NarmasteKompisen, Kompisar),
   !,
@@ -42,7 +43,8 @@ elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
   elimineringUtavKamrater(Kompisar,KonspirationsTeoretiker).
 
 
-
+% Lägg ej till NärmasteKompisen i KonspirationsTeoretiker.
+% Kalla funktionen igen med resterande kompisar.
 elimineringUtavKamrater([NarmasteKompisen|Kompisar],KonspirationsTeoretiker):-
   elimineringUtavKamrater(Kompisar, KonspirationsTeoretiker).
 
