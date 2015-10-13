@@ -38,21 +38,19 @@ kompis(A,B) :- knows(A,B) ; knows(B,A).
 
 
 
-% TODO FIXA kanskeJagGillarDig
-% Känner någon i listan någon?
-kanskeJagGillarDig(_, []).
+% Känner P1 någon i listan?
+harKompis(_, []).
 
-kanskeJagGillarDig(P1, [P2|Tail]):-
-  allaMinaKamrater(P1,_),
-  kanskeJagGillarDig(Tail).
+harKompis(P1, Vanner):-
+  kompis(P1, P2),
+  member(P2,Vanner),!.
 
-% TODO här kan vi ev. få fel när vi subtractar folk från listan.
-% TODO vi borde skicka in 2 listor. En med alla spindelns vänner som vi inte ändrar, och en där vi tar bort deras vänner.
+% Ta bort personer som känner någon annan i listan.
 elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
   allaMinaKamrater(NarmasteKompisen, Svar),
   subtract(Kompisar, Svar, KollaIgen),
   elimineringUtavKamrater(KollaIgen,K1),
-  KonspirationsTeoretiker = [NarmasteKompisen | K1].
+  KonspirationsTeoretiker = [NarmasteKompisen | K1], !.
 
 elimineringUtavKamrater([_|Kompisar], K):-
   elimineringUtavKamrater(Kompisar,K).
@@ -61,10 +59,10 @@ elimineringUtavKamrater([],[]).
 
 % Kolla om alla personer känner någon i listan KonstigaManniskor.
 % Om detta är fallet returnera true. Annars false.
-% TODO: FIXA forall
-jagEPoppis([KonstigaManniskor]):-
-  forall(Person(Asome),
-  member(Asome,KonstigaManniskor);kanskeJagGillarDig(Asome,KonstigaManniskor)).
+% % TODO: FIXA forall
+jagEPoppis(KonstigaManniskor):-
+  forall(person(Y),
+  (member(Y,KonstigaManniskor);harKompis(Y,KonstigaManniskor))).
 
 
 % hämta person X
