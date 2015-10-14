@@ -1,20 +1,11 @@
 
 def main():
-    whritetooutput(40)
+    writeToOutput(40)
 
-
-def manniska(man):
-    a = "person(p", man ,").\n"
-    return a
-
-def whritetooutput(man):
+def writeToOutput(man):
      with open ("test.pl","w") as r:
         a = 1
         while man > 0:
-
-            #r.write("person(p")
-            #r.write(man)
-            #r.write(").")
             r.write("person(p%s).\n" %man)
             man = man -1
         x = 1
