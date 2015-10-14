@@ -1,24 +1,19 @@
 % By Trolle Geuna & Oskar Casselryd, 2015
 
-% Ta en person, kollar dess vänner.
-% Ta bort alla vänner som är vänner med spindelns vänner.
-
-
-
-
-
+% Testa med alla personer.
 spider(X):-
-  % Tar nästa perosn från exemplet
+  % Tar nästa person från exemplet
   person(X),
+  hittaSpindel(X).
+
+hittaSpindel(X):-
   % Hittar denna persons Kompisar
   allaMinaKamrater(X,Kompisar),
   % Return lista med kamrater som inte känner varandra. Dvs möjliga konspiratorer.
-  elimineringUtavKamrater(Kompisar,KonstigaManniskor),
+  fixaKonspiratorer(Kompisar, [], KonstigaManniskor),
   % Kolla om alla personer är vän med någon konspiratör. Om så är fallet är X spindel.
-  jagEPoppis(KonstigaManniskor).
-  %write(KonstigaManniskor)
-  % Backtrack, kolla detta för alla personer.
-  % backa(X,Kompisar).
+  jagEPoppis(KonstigaManniskor),
+  !.
 
 
 allaMinaKamrater(X, Kompisar):-
@@ -29,33 +24,29 @@ allaMinaKamrater(X, Kompisar):-
 kompis(A,B) :- knows(A,B) ; knows(B,A).
 
  
-% % Känner någon i listan någon?
-% noFriends(P, []).
-%
-% noFriends(P1, [P2|Tail]):-
-%   not(hittaMinaKamrater(P,Hokus)),
-%   noFriends(Tail).
+% harKompis FUNKAR!
+% Känner P någon i listan? True eller false.
+harKompis(P, Lista):-
+  not(harKompisHelp(P, Lista)).
+
+% Return true om P inte känner någon i listan.
+harKompisHelp(_, []).
+
+harKompisHelp(P, [Head|Lista]):-
+  not(kompis(P, Head)),
+  harKompisHelp(P, Lista).
 
 
+% Ta in spindelns vänner och returnera en lista med folk som inte känner varandra.
+fixaKonspiratorer([], Svar, Svar).
 
-% Känner P1 någon i listan?
-harKompis(_, []).
+fixaKonspiratorer([Y|SpindelKompisar], Konspiratorer, Svar):-
+  not(harKompis(Y, Konspiratorer)), % Y har ingen kompis bland konspiratorerna.
+  fixaKonspiratorer(SpindelKompisar, [Y|Konspiratorer], Svar). % Gå vidare.
 
-harKompis(P1, Vanner):-
-  kompis(P1, P2),
-  member(P2,Vanner),!.
+fixaKonspiratorer([_|SpindelKompisar], Konspiratorer, Svar) :-
+  fixaKonspiratorer(SpindelKompisar, Konspiratorer, Svar).
 
-% Ta bort personer som känner någon annan i listan.
-elimineringUtavKamrater([NarmasteKompisen|Kompisar], KonspirationsTeoretiker):-
-  allaMinaKamrater(NarmasteKompisen, Svar),
-  subtract(Kompisar, Svar, KollaIgen),
-  elimineringUtavKamrater(KollaIgen,K1),
-  KonspirationsTeoretiker = [NarmasteKompisen | K1], !.
-
-elimineringUtavKamrater([_|Kompisar], K):-
-  elimineringUtavKamrater(Kompisar,K).
-
-elimineringUtavKamrater([],[]).
 
 % Kolla om alla personer känner någon i listan KonstigaManniskor.
 % Om detta är fallet returnera true. Annars false.
