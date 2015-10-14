@@ -1,6 +1,6 @@
 
 def main():
-    writeToOutput(40)
+    writeToOutput(25)
 
 def writeToOutput(man):
      with open ("test.pl","w") as r:
@@ -9,7 +9,7 @@ def writeToOutput(man):
             r.write("person(p%s).\n" %man)
             man = man -1
         x = 1
-        while (x < 40):
+        while (x < 2):
             y = 1
             while (y<20):
                 r.write("knows(p%s,p%s).\n" %(x,y))
