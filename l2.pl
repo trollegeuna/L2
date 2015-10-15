@@ -17,8 +17,8 @@ hittaSpindel(X):-
 
 
 allaMinaKamrater(X, Kompisar):-
+  % Bagof fails om inga kompisar finns.
   bagof(Kamrat, kompis(X,Kamrat), Kompisar).
-  %findall(Kamrat ,kompis(X, Kamrat), Kompisar).
 
 % Vänskap går åt båda hållen.
 kompis(A,B) :- knows(A,B) ; knows(B,A).
@@ -50,7 +50,6 @@ fixaKonspiratorer([_|SpindelKompisar], Konspiratorer, Svar) :-
 
 % Kolla om alla personer känner någon i listan KonstigaManniskor.
 % Om detta är fallet returnera true. Annars false.
-% % TODO: FIXA forall
 jagEPoppis(KonstigaManniskor):-
   forall(person(Y),
   (member(Y,KonstigaManniskor);harKompis(Y,KonstigaManniskor))).
